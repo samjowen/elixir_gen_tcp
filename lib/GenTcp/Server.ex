@@ -15,12 +15,15 @@ defmodule GenTcp.Server do
   end
 
   def network_loop(listenSocket) do
+    Logger.log(:debug, "Starting network loop.")
     {:ok, socket} = :gen_tcp.accept(listenSocket)
     serve(socket)
     network_loop(socket)
   end
 
   defp serve(socket) do
+    Logger.log(:debug, "Serving socket...")
+
     socket
     |> get_client_packet()
     |> send_server_packet(socket)

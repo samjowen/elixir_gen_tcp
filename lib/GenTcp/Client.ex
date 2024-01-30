@@ -12,15 +12,14 @@ defmodule GenTcp.Client do
     {:ok, init_arg}
   end
 
-  def handle_call({:send_packet, message, url, port}, _from, state) do
+  def handle_call({:send_packet, message, hostname, port}, _from, state) do
     Logger.log(:debug, "Attempting to send packet.")
+    opts = [:binary, :inet, active: false, packet: :line]
 
     {:ok, socket} =
-      :gen_tcp.connect(url,
-        port: port
-      )
+      :gen_tcp.connect(hostname, port, opts)
 
-    Logger.log(:debug, "Socket made.")
+    Logger.log(:debug, "Socket made: #{inspect(socket)}")
     :ok = send_packet(socket, message)
     {:ok, data} = read_socket(socket)
 
@@ -40,6 +39,6 @@ defmodule GenTcp.Client do
 
   # Public Interfaces
   def send_message(message) do
-    GenServer.call(__MODULE__, {:send_packet, message, ~c"localhost", 4000})
+    GenServer.call(__MODULE__, {:send_packet, message, :localhost, 4000})
   end
 end
