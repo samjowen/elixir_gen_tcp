@@ -7,7 +7,7 @@ defmodule GenTcp.Client do
   end
 
   def init(_) do
-    Logger.log(:debug, "Starting Server.")
+    Logger.log(:debug, "Starting Client.")
     init_arg = nil
     {:ok, init_arg}
   end
