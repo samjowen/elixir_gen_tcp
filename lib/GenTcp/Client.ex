@@ -3,7 +3,7 @@ defmodule GenTcp.Client do
   use GenServer
 
   def start_link(_) do
-    GenServer.start(__MODULE__, nil, name: __MODULE__)
+    GenServer.start_link(__MODULE__, nil, name: __MODULE__)
   end
 
   def init(_) do
@@ -15,8 +15,12 @@ defmodule GenTcp.Client do
   def handle_call({:send_packet, message, url, port}, _from, state) do
     Logger.log(:debug, "Attempting to send packet.")
 
-    {:ok, socket} = :gen_tcp.connect(url, port: 4000)
+    {:ok, socket} =
+      :gen_tcp.connect(url,
+        port: port
+      )
 
+    Logger.log(:debug, "Socket made.")
     :ok = send_packet(socket, message)
     {:ok, data} = read_socket(socket)
 
