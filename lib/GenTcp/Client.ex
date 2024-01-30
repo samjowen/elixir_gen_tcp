@@ -27,9 +27,9 @@ defmodule GenTcp.Client do
   end
 
   defp send_packet(socket, packet) do
-    Logger.log(:debug, "#{__MODULE__}: Sending packet...")
+    Logger.log(:debug, "#{__MODULE__}: Sending packet to server...")
     :ok = :gen_tcp.send(socket, packet)
-    Logger.log(:debug, "#{__MODULE__}: Packet sent.")
+    Logger.log(:debug, "#{__MODULE__}: Packet sent to server.")
   end
 
   defp read_socket(socket) do

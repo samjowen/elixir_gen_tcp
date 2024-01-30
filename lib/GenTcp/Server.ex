@@ -18,7 +18,6 @@ defmodule GenTcp.Server do
     Logger.log(:debug, "Starting network loop.")
     {:ok, socket} = :gen_tcp.accept(listenSocket)
     serve(socket)
-    network_loop(socket)
   end
 
   defp serve(socket) do
@@ -28,6 +27,7 @@ defmodule GenTcp.Server do
     |> get_client_packet()
     |> send_server_packet(socket)
 
+    Logger.log(:debug, "#{__MODULE__}: Done serving, going again...")
     serve(socket)
   end
 
@@ -37,7 +37,7 @@ defmodule GenTcp.Server do
   end
 
   defp send_server_packet(socket, packet) do
-    Logger.log(:debug, "Sending packet to client...")
+    Logger.log(:debug, "#{__MODULE__}: Sending packet to client...")
     :gen_tcp.send(socket, packet)
   end
 
