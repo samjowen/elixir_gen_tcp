@@ -38,9 +38,13 @@ defmodule GenTcp.Server do
     packet
   end
 
-  defp send_server_packet(socket, packet) do
+  defp send_server_packet(packet, socket) do
     Logger.log(:debug, "#{__MODULE__}: Sending packet to client...")
-    :gen_tcp.send(socket, packet)
+
+    IO.inspect(packet)
+
+    :ok =
+      :gen_tcp.send(socket, packet)
   end
 
   def init(_) do
