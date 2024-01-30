@@ -1,4 +1,5 @@
 defmodule GenTcp.Server do
+  require Logger
   # Always restart the Server if it crashes
   use GenServer
 
@@ -7,6 +8,7 @@ defmodule GenTcp.Server do
   end
 
   def init(_) do
+    Logger.log(:debug, "Starting Server.")
     init_state = nil
     {:ok, init_state}
   end

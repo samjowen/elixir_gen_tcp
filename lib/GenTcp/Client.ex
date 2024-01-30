@@ -1,4 +1,5 @@
 defmodule GenTcp.Client do
+  require Logger
   use GenServer
 
   def start_link(_) do
@@ -6,6 +7,7 @@ defmodule GenTcp.Client do
   end
 
   def init(_) do
+    Logger.log(:debug, "Starting Server.")
     init_arg = nil
     {:ok, init_arg}
   end
