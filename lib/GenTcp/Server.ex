@@ -2,7 +2,7 @@ defmodule GenTcp.Server do
   # Always restart the Server if it crashes
   use GenServer
 
-  def start_link(_) do
+  def start_link() do
     GenServer.start_link(__MODULE__, nil, name: __MODULE__)
   end
 
