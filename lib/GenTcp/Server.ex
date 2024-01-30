@@ -32,7 +32,9 @@ defmodule GenTcp.Server do
   end
 
   defp get_client_packet(socket) do
+    Logger.log(:debug, "#{__MODULE__}: Getting packet from client...")
     {:ok, packet} = :gen_tcp.recv(socket, 0)
+    Logger.log(:debug, "#{__MODULE__}: Got packet from client: #{inspect(packet)}")
     packet
   end
 
