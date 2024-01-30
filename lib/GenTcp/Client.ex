@@ -15,7 +15,7 @@ defmodule GenTcp.Client do
   def handle_call({:send_packet, message, hostname, port}, _from, state) do
     Logger.log(:debug, "#{__MODULE__}: Attempting to send packet.")
     # Be careful with packet: :line, it will not send the packet until a newline is sent
-    opts = [:binary, :inet, active: false, packet: :line]
+    opts = [:binary, :inet, active: false, packet: :raw]
 
     {:ok, socket} =
       :gen_tcp.connect(hostname, port, opts)

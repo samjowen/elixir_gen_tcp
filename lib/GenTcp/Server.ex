@@ -47,7 +47,7 @@ defmodule GenTcp.Server do
     Logger.log(:debug, "Starting Server.")
 
     {:ok, socket} =
-      :gen_tcp.listen(@port, [:binary, packet: :line, active: false, reuseaddr: true])
+      :gen_tcp.listen(@port, [:binary, packet: :raw, active: false, reuseaddr: true])
 
     Logger.log(:info, "Server listening on port #{@port}.")
 
