@@ -7,30 +7,33 @@ defmodule GenTcp.Client do
   end
 
   def init(_) do
-    Logger.log(:debug, "Starting Client.")
+    Logger.log(:debug, "#{__MODULE__}: Starting Client.")
     init_arg = nil
     {:ok, init_arg}
   end
 
   def handle_call({:send_packet, message, hostname, port}, _from, state) do
-    Logger.log(:debug, "Attempting to send packet.")
+    Logger.log(:debug, "#{__MODULE__}: Attempting to send packet.")
     opts = [:binary, :inet, active: false, packet: :line]
 
     {:ok, socket} =
       :gen_tcp.connect(hostname, port, opts)
 
-    Logger.log(:debug, "Socket made: #{inspect(socket)}")
+    Logger.log(:debug, "#{__MODULE__}: Socket made: #{inspect(socket)}")
     :ok = send_packet(socket, message)
     {:ok, data} = read_socket(socket)
-
+    Logger.log(:debug, "#{__MODULE__}: Data: #{inspect(data)}")
     {:reply, data, state}
   end
 
   defp send_packet(socket, packet) do
-    :gen_tcp.send(socket, packet)
+    Logger.log(:debug, "#{__MODULE__}: Sending packet...")
+    :ok = :gen_tcp.send(socket, packet)
+    Logger.log(:debug, "#{__MODULE__}: Packet sent.")
   end
 
   defp read_socket(socket) do
+    Logger.log(:debug, "#{__MODULE__}: Reading socket data...")
     {:ok, data} = :gen_tcp.recv(socket, 0)
     {:ok, data}
   end

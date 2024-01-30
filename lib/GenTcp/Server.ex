@@ -37,6 +37,7 @@ defmodule GenTcp.Server do
   end
 
   defp send_server_packet(socket, packet) do
+    Logger.log(:debug, "Sending packet to client...")
     :gen_tcp.send(socket, packet)
   end
 
