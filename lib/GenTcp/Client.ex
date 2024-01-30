@@ -13,8 +13,10 @@ defmodule GenTcp.Client do
   end
 
   def handle_call({:send_packet, message, url, port}, _from, state) do
-    Logger.log(:debug, "Attempting to ")
-    {:ok, socket} = :gen_tcp.connect(url, port: port)
+    Logger.log(:debug, "Attempting to send packet.")
+
+    {:ok, socket} = :gen_tcp.connect(url, port: 4000)
+
     :ok = send_packet(socket, message)
     {:ok, data} = read_socket(socket)
 
@@ -33,7 +35,7 @@ defmodule GenTcp.Client do
   # End 'Private' interfaces
 
   # Public Interfaces
-  def send_message(message, url, port) do
-    GenServer.call(__MODULE__, {:send_packet, message, url, port})
+  def send_message(message) do
+    GenServer.call(__MODULE__, {:send_packet, message, ~c"localhost", 4000})
   end
 end
