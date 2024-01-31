@@ -17,8 +17,8 @@ defmodule GenTcp.Server do
   def network_loop(listenSocket) do
     Logger.log(:debug, "Starting network loop.")
     {:ok, socket} = :gen_tcp.accept(listenSocket)
-    serve(socket)
-
+    Task.start(fn -> serve(socket) end)
+    # Tail call to keep the loop going
     network_loop(listenSocket)
   end
 
