@@ -3,7 +3,7 @@ defmodule GenTcp.System do
     Supervisor.start_link(
       [
         GenTcp.Server,
-        {GenTcp.Client, restart: :permanent}
+        GenTcp.Client
       ],
       strategy: :one_for_one
     )

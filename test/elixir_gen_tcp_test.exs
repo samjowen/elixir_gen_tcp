@@ -5,4 +5,8 @@ defmodule GenTcp.Test do
     assert Process.whereis(GenTcp.Client)
     assert Process.whereis(GenTcp.Server)
   end
+
+  test "we can stop the server" do
+    GenTcp.Server.stop()
+  end
 end
