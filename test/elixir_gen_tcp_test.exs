@@ -1,8 +1,8 @@
-defmodule ElixirGenTcpTest do
+defmodule GenTcp.Test do
   use ExUnit.Case
-  doctest ElixirGenTcp
 
-  test "greets the world" do
-    assert ElixirGenTcp.hello() == :world
+  test "the system starts with the client and server" do
+    assert Process.whereis(GenTcp.Client)
+    assert Process.whereis(GenTcp.Server)
   end
 end
