@@ -5,6 +5,17 @@ defmodule GenTcp.Server do
 
   @port 4000
 
+  def init(_) do
+    Logger.log(:debug, "Starting Server.")
+
+    {:ok, socket} =
+      :gen_tcp.listen(@port, [:binary, packet: :raw, active: false, reuseaddr: true])
+
+    Logger.log(:info, "Server listening on port #{@port}.")
+    start_server()
+    {:ok, socket}
+  end
+
   def start_link(_) do
     GenServer.start_link(__MODULE__, nil, name: __MODULE__)
   end
@@ -46,17 +57,6 @@ defmodule GenTcp.Server do
 
     :ok =
       :gen_tcp.send(socket, packet)
-  end
-
-  def init(_) do
-    Logger.log(:debug, "Starting Server.")
-
-    {:ok, socket} =
-      :gen_tcp.listen(@port, [:binary, packet: :raw, active: false, reuseaddr: true])
-
-    Logger.log(:info, "Server listening on port #{@port}.")
-
-    {:ok, socket}
   end
 
   # Public function to start the server
