@@ -5,68 +5,56 @@ defmodule GenTcp.Server do
 
   @port 4000
 
-  def init(_) do
+  @impl true
+  def init(:no_state) do
     Logger.log(:debug, "Starting Server.")
 
-    {:ok, socket} =
-      :gen_tcp.listen(@port, [
-        :binary,
-        packet: :raw,
-        active: false,
-        reuseaddr: true,
-        recbuf: 2048
-      ])
+    case :gen_tcp.listen(@port, [
+           :binary,
+           packet: :raw,
+           active: false,
+           reuseaddr: true,
+           recbuf: 2048
+         ]) do
+      {:ok, listenSocket} ->
+        Logger.log(:info, "Server listening on port #{@port}.")
+        {:ok, listenSocket, {:continue, :accept}}
 
-    Logger.log(:info, "Server listening on port #{@port}.")
-    start_server()
-    {:ok, socket}
+      {:error, reason} ->
+        {:error, reason}
+    end
   end
 
   def start_link(_) do
-    GenServer.start_link(__MODULE__, nil, name: __MODULE__)
+    GenServer.start_link(__MODULE__, :no_state, name: __MODULE__)
   end
 
-  def handle_cast({:start_server}, listenSocket) do
-    network_loop(listenSocket)
-    {:noreply, nil}
-  end
-
-  def network_loop(listenSocket) do
-    Logger.log(:debug, "Starting network loop.")
+  @impl true
+  def handle_continue(:accept, listenSocket) do
     {:ok, socket} = :gen_tcp.accept(listenSocket)
-    Task.start(fn -> serve(socket) end)
-    # Tail call to keep the loop going
-    network_loop(listenSocket)
+
+    Task.start(fn ->
+      serve(socket)
+    end)
+
+    {:noreply, listenSocket, {:continue, :accept}}
   end
 
   defp serve(socket) do
-    Logger.log(:debug, "Serving socket...")
-
     socket
     |> get_client_packet()
     |> send_server_packet(socket)
 
-    Logger.log(:debug, "#{__MODULE__}: Done serving, going again...")
+    # Close the socket
+    :ok = :gen_tcp.close(socket)
   end
 
   defp get_client_packet(socket) do
-    Logger.log(:debug, "#{__MODULE__}: Getting packet from client...")
-    {:ok, packet} = :gen_tcp.recv(socket, 0)
-    Logger.log(:debug, "#{__MODULE__}: Got packet from client: #{inspect(packet)}")
+    {:ok, packet} = :gen_tcp.recv(socket, 0, 10_000)
     packet
   end
 
   defp send_server_packet(packet, socket) do
-    Logger.log(:debug, "#{__MODULE__}: Sending packet to client...")
-
-    IO.inspect(packet)
-
-    :ok =
-      :gen_tcp.send(socket, packet)
-  end
-
-  # Public function to start the server
-  def start_server() do
-    GenServer.cast(__MODULE__, {:start_server})
+    :ok = :gen_tcp.send(socket, packet)
   end
 end
