@@ -46,7 +46,7 @@ defmodule GenTcp.Server do
     |> send_server_packet(socket)
 
     # Close the socket
-    :ok = :gen_tcp.close(socket)
+    # :ok = :gen_tcp.close(socket)
   end
 
   defp get_client_packet(socket) do
