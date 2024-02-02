@@ -1,10 +1,11 @@
 # syntax=docker/dockerfile:1
 
-FROM alpine:3.19.1
-RUN apk add elixir
-COPY ./lib /app
-COPY ./mix.exs /app
-RUN cd /app
+FROM elixir:1.12-alpine
 WORKDIR /app
-RUN mix compile
+COPY ./lib /app/lib
+COPY ./mix.exs /app
+RUN mix local.hex --force && \
+    mix local.rebar --force && \
+    mix deps.get && \
+    mix compile
 CMD mix run --no-halt
