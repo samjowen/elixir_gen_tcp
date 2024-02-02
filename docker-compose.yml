@@ -1,0 +1,5 @@
+version: '3.9'
+
+services:
+  app:
+    image: ghcr.io/samjowen/elixir_gen_tcp:latest
