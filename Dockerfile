@@ -5,5 +5,6 @@ RUN apk add elixir
 COPY ./lib /app
 COPY ./mix.exs /app
 RUN cd /app
+WORKDIR /app
 RUN mix compile
 CMD mix run --no-halt
