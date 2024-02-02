@@ -16,7 +16,7 @@ defmodule ElixirGenTcp.MixProject do
     [
       extra_applications: [:logger],
       # Now, when we run iex -S mix, we will run the Application
-      mod: {GenTcp.Application, []}
+      mod: {GenTcp.Application, [:type, :args]}
     ]
   end
 
