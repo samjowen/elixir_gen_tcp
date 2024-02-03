@@ -1,9 +1,8 @@
 # syntax=docker/dockerfile:1
 
 FROM elixir:1.15-alpine
+COPY ./ /app/
 WORKDIR /app
-COPY ./lib /app/lib
-COPY ./mix.exs /app
 RUN mix local.hex --force && \
     mix local.rebar --force && \
     mix deps.get && \
