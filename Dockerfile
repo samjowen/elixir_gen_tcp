@@ -3,8 +3,6 @@
 FROM elixir:1.15-alpine
 COPY ./ /app/
 WORKDIR /app
-RUN mix local.hex --force && \
-    mix local.rebar --force && \
-    mix deps.get && \
-    mix compile
+RUN mix deps.get
+RUN mix compile
 CMD mix run --no-halt
