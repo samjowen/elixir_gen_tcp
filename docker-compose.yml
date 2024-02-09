@@ -3,3 +3,5 @@ version: '3.9'
 services:
   app:
     image: ghcr.io/samjowen/elixir_gen_tcp:main
+    ports:
+      - ${TCP_LISTEN_PORT}:${TCP_LISTEN_PORT}

@@ -3,7 +3,8 @@ defmodule GenTcp.Server do
   # Always restart the Server if it crashes
   use GenServer
 
-  @port 4000
+  # Env var: TCP_LISTEN_PORT
+  @port System.get_env("TCP_LISTEN_PORT") || 4040
 
   @impl true
   def init(:no_state) do
