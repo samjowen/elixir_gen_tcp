@@ -3,10 +3,11 @@ defmodule GenTcp.Server do
   # Always restart the Server if it crashes
   use GenServer
 
-  # Env var: TCP_LISTEN_PORT
-  @port System.get_env("TCP_LISTEN_PORT") || 4040
+  @port Application.compile_env(:echo_server, :tcp_listen_port)
 
   @impl true
+  @spec init(:no_state) ::
+          {:error, atom()} | {:ok, port() | {:"$inet", atom(), any()}, {:continue, :accept}}
   def init(:no_state) do
     Logger.log(:debug, "Starting Server.")
 
