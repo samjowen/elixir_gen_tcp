@@ -3,7 +3,7 @@ defmodule GenTcp.Server do
   # Always restart the Server if it crashes
   use GenServer
 
-  @port Application.compile_env(:echo_server, :tcp_listen_port)
+  @port 4000
 
   @impl true
   @spec init(:no_state) ::
